@@ -273,10 +273,10 @@ volumeCyllinder height diameter =
 
 ## List Comprehension
 
-Si has has usado Python seguro estas familiarizado con esta manera de definir listas y en Haskell no es la excepción.
-
+Si has has usado Python seguro estas familiarizado con esta manera de definir listas, esto nos permite de manera sencilla generar nuevas listas. Tambien de esta manera es posible construir nuestro propia función `filter` como viene a continuación.
 
 **Haskell Version**
+
 ```haskell
 myFilter :: (a -> Bool) -> [a] -> [a]
 myFilter cond values = [value | value <- values, cond value]
