@@ -19,3 +19,6 @@ volumeCyllinder height diameter =
   let radius = diameter / 2
       base = pi * (radius ^ 2)
    in "The volume of the cyllinder is " ++ show (base * height)
+
+myFilter :: (a -> Bool) -> [a] -> [a]
+myFilter cond values = [value | value <- values, cond value]

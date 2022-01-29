@@ -18,6 +18,7 @@ Este artículo es una introducción a Haskell para todo aquel que proviene de un
   - [Manejo de Inputs y Outputs](#manejo-de-inputs-y-outputs)
   - [Adios iteradores](#adios-iteradores)
   - [Where y Let](#where-y-let)
+  - [List Comprehension](#list-comprehension)
 
 Siempre que hablo con otros desarrolladores de software sobre este lenguaje, me dicen "Intenté aprenderlo, pero su sintaxis es... un poco peculiar", y me parece que tienen razón.
 
@@ -89,6 +90,20 @@ Aquí va un breve ejemplo de los 3 casos:
 
 #### Guard
 
+Esta es otra estructura que nos permite manejar el flujo de nuestros programas es semejante a un switch de otros lenguajes como C.
+
+Su sintaxis es:
+
+```haskell
+<name_function> :: a -> b
+<name_function> x
+    | <condition> = "This is the first result"
+    | <condition> = "This is the second result"
+    | otherwise   = "This is the last result"
+```
+
+Una implementación podria ser
+
 ```haskell
 bmiTell :: Float -> String
 bmiTell bmi
@@ -100,6 +115,8 @@ bmiTell bmi
 
 #### If
 
+Tal como en casi todos los lenguajes tenemos los `if` la unica diferencia es que no tenemos `else if` o `elif`.
+
 ```haskell
 even :: Int -> Bool
 even n = if mod n 2 == 0
@@ -108,6 +125,8 @@ even n = if mod n 2 == 0
 ```
 
 #### Case
+
+Para los casos en que necesitamos más condiciones tambien podemos usar los `case`:
 
 ```haskell
 describeList :: [a] -> String
@@ -145,7 +164,7 @@ Puedes ver más ejemplos de esto aquí:
 
 ## Todo es una función
 
-En este lenguaje hasta los operadores son una función, es decir, suma `(+)`, resta `(-)`, multiplicación `(*)`, potencia `(^)` y muchos más, son funciones e incluso puedes crear tus propios operadores.
+En este lenguaje hasta los operadores son una función, es decir, suma `(+)`, concatenar `(++)`, resta `(-)`, multiplicación `(*)`, potencia `(^)` y muchos más, son funciones e incluso puedes crear tus propios operadores.
 
 ```haskell
 (-+) :: Int -> Int -> [Int]
@@ -252,3 +271,32 @@ volumeCyllinder height diameter =
    in "The volume of the cyllinder is " ++ show (base * height)
 ```
 
+## List Comprehension
+
+Si has has usado Python seguro estas familiarizado con esta manera de definir listas y en Haskell no es la excepción.
+
+
+**Haskell Version**
+```haskell
+myFilter :: (a -> Bool) -> [a] -> [a]
+myFilter cond values = [value | value <- values, cond value]
+```
+
+```haskell
+myFilter odd [1..10] -- result: [1,3,5,7,9]
+```
+
+**Python Version**
+
+```python
+from typing import TypeVar
+
+T = TypeVar("T")
+
+def myFilter(cond: callable[[T],bool], values: list[T]):
+    return [value for value in values if cond(value)]
+```
+
+```python
+miFilter(lambda x: x % 2 != 0, range(10))) # result: [1, 3, 5, 7, 9]
+```
