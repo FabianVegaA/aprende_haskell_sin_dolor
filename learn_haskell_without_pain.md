@@ -2,10 +2,10 @@
 
 Este artículo es una introducción a Haskell para todo aquel que proviene de un lenguaje de alto nivel como Python, Ruby, Java, etc.
 
-## Indice
+## Índice
 
 - [Aprende Haskell sin dolor](#aprende-haskell-sin-dolor)
-  - [Indice](#indice)
+  - [Índice](#índice)
   - [Instalación](#instalación)
   - [Primeros pasos](#primeros-pasos)
     - [Crea tu primera función](#crea-tu-primera-función)
@@ -16,13 +16,15 @@ Este artículo es una introducción a Haskell para todo aquel que proviene de un
   - [Más ejemplos de Funciones](#más-ejemplos-de-funciones)
   - [Todo es una función](#todo-es-una-función)
   - [Manejo de Inputs y Outputs](#manejo-de-inputs-y-outputs)
-  - [Adios iteradores](#adios-iteradores)
+  - [Adiós iteradores](#adiós-iteradores)
   - [Where y Let](#where-y-let)
   - [List Comprehension](#list-comprehension)
+  - [Lazyness](#lazyness)
+  - [Referencias](#referencias)
 
 Siempre que hablo con otros desarrolladores de software sobre este lenguaje, me dicen "Intenté aprenderlo, pero su sintaxis es... un poco peculiar", y me parece que tienen razón.
 
-La sintaxis a la que la mayoría de los programadores están acostumbrados, son de algún lenguaje con paradigma imperativo. Estos apuntan principalmente a procesos y a iterar sobre listas u otra estructura de datos. Así todo lo que se salga de esa regla parecerá raro, pero eso no debiese ser en un obstáculo para aprender cosas nuevas y salir de la zona de confort.
+La sintaxis a la que la mayoría de los programadores están acostumbrados, pertenece a algún lenguaje con paradigma imperativo. Estos apuntan principalmente a procesos y a iterar sobre listas u otra estructura de datos. De este modo, todo lo que se salga de esa regla parecerá raro, pero eso no debiese ser en un obstáculo para aprender cosas nuevas y salir de la zona de confort.
 
 Aprender un nuevo lenguaje de programación, librería, framework o incluso un nuevo paradigma, es una tarea difícil, pero no imposible, que te da la oportunidad de mejorar y ampliar tu stack de conocimientos.
 
@@ -34,20 +36,20 @@ Si deseas comenzar a probar este lenguaje debes instalar su compilador llamado `
 
 ## Primeros pasos
 
-Antes que de todo, lo más importante, tu primer Hello World con Haskell, para ello abre una terminal y escribe `ghci` para abrir su intérprete y luego `putStrLn "Hello World"`. ¡Felicidades! Ya puedes decir que eres un desarrollador Haskell.
+Antes de comenzar, lo más importante, tu primer Hello World con Haskell. Para ello abre una terminal y escribe `ghci` para abrir su intérprete y luego `putStrLn "Hello World"`. ¡Felicidades! Ya puedes decir que eres un desarrollador Haskell.
 
 ```console
 $ ghci
 Prelude> putStrLn "Hello World"
 ```
 
-Fuera de bromas, Haskell es un lenguaje de paradigma funcional puro, lo que implica que mantiene la transparencia referencial y no posee side effects. Además, es un lenguaje con tipificado fuerte y estático
+Fuera de bromas, Haskell es un lenguaje de paradigma funcional puro, lo que implica que mantiene la transparencia referencial y no posee side effects. Además, es un lenguaje con tipificado fuerte y estático.
 
-**¿Y en español que significa?**
+**¿Y en español qué significa?**
 
-En otras palabras, en este lenguaje no tenemos variables como tal, solo valores que se pueden asignar, pero no alterarse, demás si llamamos a una función con ciertos argumentos y nos devuelve un valor, podemos esperar que esa función siempre responda igual con los mismos argumentos. Lo que nos entrega determinismo.
+En otras palabras, en este lenguaje no tenemos variables como tal, solo valores que se pueden asignar, pero no alterarse. Además si llamamos a una función con ciertos argumentos y nos devuelve un valor, podemos esperar que esa función siempre responda igual con los mismos argumentos. Lo que nos entrega determinismo.
 
-En cuanto al tipificado, significa que si se asigna un valor a una variable con tipo `Int`, ese valor no puede ser cambiado a otro valor de tipo `String` o `Float`, por ejemplo. Y ni intentes sumar un `Int` con un `String` como en JavaScript o Scala.
+En cuanto al tipificado, significa que si se asigna un valor a una variable con tipo `Int`, ese valor no puede ser cambiado a otro valor de tipo `String` o `Float`. Y ni intentes sumar un `Int` con un `String` como en JavaScript o Scala.
 
 Tal como se puede intuir del nombre del paradigma en Haskell el protagonismo lo poseen las funciones y las diferentes maneras como se juntan para programar algoritmos.
 
@@ -61,9 +63,11 @@ doubleMe x = x + x     -- Definición de la función
 Equivalente a:
 
 ```python
-def doubleMe(x: int) -> int:
+def double_me(x: int) -> int:
     return x + x
 ```
+
+A diferencia de la mayoría de lenguajes, aquí no es necesario utilizar el `return` para retornar un valor, en Haskell todo lo que esté luego del `=` es lo que se retorna.
 
 Esta función se llama `doubleMe` y las flechas de arriba significan que esta función recibe un `Int` y devuelve un `Int`. Siempre que quieras leer la firma de una función en Haskell debes tomar en cuenta que los primeros $n-1$ tipos son los argumentos de la función y el último lo que retorna.
 
@@ -90,7 +94,7 @@ Aquí va un breve ejemplo de los 3 casos:
 
 #### Guard
 
-Esta es otra estructura que nos permite manejar el flujo de nuestros programas es semejante a un switch de otros lenguajes como C.
+Esta es otra estructura que nos permite manejar el flujo de nuestros programas, es semejante a un switch de otros lenguajes como C.
 
 Su sintaxis es:
 
@@ -102,7 +106,7 @@ Su sintaxis es:
     | otherwise   = "This is the last result"
 ```
 
-Una implementación podria ser
+Una implementación podría ser:
 
 ```haskell
 bmiTell :: Float -> String
@@ -115,7 +119,7 @@ bmiTell bmi
 
 #### If
 
-Tal como en casi todos los lenguajes tenemos los `if` la unica diferencia es que no tenemos `else if` o `elif`.
+Tal como en casi todos los lenguajes tenemos los `if` la única diferencia es que no tenemos `else if` o `elif`.
 
 ```haskell
 even :: Int -> Bool
@@ -126,7 +130,7 @@ even n = if mod n 2 == 0
 
 #### Case
 
-Para los casos en que necesitamos más condiciones tambien podemos usar los `case`:
+Para los casos en que necesitamos más condiciones también podemos usar los `case`:
 
 ```haskell
 describeList :: [a] -> String
@@ -171,7 +175,7 @@ En este lenguaje hasta los operadores son una función, es decir, suma `(+)`, co
 (-+) a b = [a - b, a + b]
 ```
 
-Por ejemplo en el caso de arriba acabamos de generar un operador que nos da el valor de la suma y la resta de 2 `Int`.
+Por ejemplo en el caso de arriba acabamos de generar un operador que nos da el valor de la resta y la suma de 2 `Int`.
 
 ```haskell
 5 -+ 4 -- return: [1, 9]
@@ -179,7 +183,7 @@ Por ejemplo en el caso de arriba acabamos de generar un operador que nos da el v
 
 ## Manejo de Inputs y Outputs
 
-Seguro ya debes estar sobrepasado de información, pero ahora vamos a ver algunos ejemplos de como recibir inputs y devolver outputs, pues es algo clave para por ejemplo hacer un CLI.
+Seguro ya debes estar sobrepasado de información, pero ahora vamos a ver la forma de recibir inputs y devolver outputs, pues es algo clave para, por ejemplo, hacer un CLI (Command Line Interface).
 
 Una de las consecuencias de la programación funcional pura es que los inputs y outpus, deben mantenerse lejos de la pureza de las funciones 😇, por ello se tiene la `do notation` esta es una _syntax sugar_ que nos permite hacer una función que reciba inputs y devuelva outputs.
 
@@ -195,11 +199,11 @@ main = do
 
 Si estás pensando en que nunca más quieres ver un lenguaje de este paradigma, primero respira un poco, bebe agua y después haz una pregunta: ¿Qué es un `IO`?
 
-Y yo te responderé `IO` es un Monad 🤯. Tranquilo... Es tan complejo como parece, pero es tema para otro día, así que sigamos con lo siguiente que debió hacerte levantar una ceja, tal que así 🤨. ¿Qué es esa flecha `<-` en el `do`?
+Y yo te responderé `IO` es un Monad 🤯. Tranquilo... Es tan complejo como parece, pero es tema para otro día. Así que sigamos con lo siguiente que debió hacerte levantar una ceja, tal que así 🤨. ¿Qué es esa flecha `<-` en el `do`?
 
 Eso significa que el resultado de getLine que es un `IO String` por ahora imagina a `IO` como una caja que contiene un `String`, y eso es lo que se guarda en `name`.
 
-## Adios iteradores
+## Adiós iteradores
 
 Algo que suele ser muy traumático en este lenguaje y en la programación funcional en general para los programadores es que aquí no existen estructuras como los `for`, `while`, ni `do while`, lo que suele confundir. Esto no significa que no haya otra manera de recorrer una lista, solo nos lleva usar otras formas de hacerlo.
 
@@ -215,11 +219,15 @@ iterateList f (x:xs) = f x : iterateList f xs
 
 Vayamos por partes:
 
-1. `(a -> b)` en la firma significa que recibe una función que recibe un argumento de tipo `a` y retorna un tipo `b`.
-2. `_ []` quiere decir que ignoramos el primer argumento, es decir, la función y `[]` nos dice que recibe una lista vacía, todo esto puedes leerlo como "si iterateList recibe una lista vacía sin importar que función sea, iterateList retornara una lista vacía".
+1. `(a -> b)` en la firma significa que recibe una función que a su vez recibe un argumento de tipo `a` y retorna un tipo `b`.
+2. `_ []` quiere decir que ignoramos el primer argumento, es decir, la función y `[]` nos dice que recibe una lista vacía. Todo esto puedes leerlo como "si iterateList recibe una lista vacía sin importar que función sea, iterateList retornara una lista vacía".
 3. `(x:xs)` es una manera de aprovechar el pattern matching guardando el primer valor de la lista en `x` y lo demás en `xs`, es decir, para `[1,2,3,4]`, `x = 1` y `xs = [2,3,4]`.
 
-¡Sorpresa! Acabamos de descubrir la función `map` que debes haberlo visto en otros lenguajes.
+¡Sorpresa! Acabamos de descubrir la función `map` que debes haberlo visto en otros lenguajes. La función `iterateList` es lo mismo que `map` de Haskell.
+
+```haskell
+map odd [1,2,3,4] -- return: [True, False, True, False]
+```
 
 Tal como esto, existe `filter`, `foldl`, `foldl1` y muchos más, pero concentrémonos en los 2 últimas funciones.
 
@@ -227,7 +235,12 @@ Tal como esto, existe `filter`, `foldl`, `foldl1` y muchos más, pero concentré
 foldl :: (b -> a -> b) -> b -> t a -> b
 ```
 
-Esta función es equivalente a `reduce` de Python y su firma nos dice que recibe una función que toma dos valores y los lleva a uno de tipo `b`, también toma otro `b` nuestro valor inicial y a un tipo `t b`, esto significa que `b` está en un Monad (en una caja), para lo que lo necesitamos nuestra caja es una lista, si las listas también son Monads en Haskell. Retomando la firma, entonces tenemos una función, un valor inicial, una lista y finalmente se retorna un tipo `b`. Veamos un ejemplo:
+Esta función es equivalente a `reduce` de Python y para entender su firma desglocemoslo por partes:
+
+1. `(b -> a -> b)`: Esto es una función que recibe un tipo `b`, un `a` y retorna un `b`.
+2. `b`: Para esta función este argumento es un valor inicial.
+3. `t a`: Esto significa que `a` está en un Monad (en una "caja"), para lo que lo necesitamos nuestra caja es una lista. Sí, las listas también son Monads en Haskell.
+4. `b`: Esto es el valor final de la función.
 
 ```haskell
 foldl (+) 0 [1,2,3] -- return: 6
@@ -235,7 +248,7 @@ foldl (+) 0 [1,2,3] -- return: 6
 
 Como tal vez lo intuiste `foldl` lo que hace es `(((0 + 1) + 2) + 3)`.
 
-Para `foldl1` es lo mismo solo que el valor inicial se toma al primer valor de la lista. Es decir:
+Para `foldl1` es lo mismo solo que para el valor inicial se toma al primer valor de la lista. Es decir:
 
 ```haskell
 foldl1 :: (b -> a -> b) -> t a -> b
@@ -249,7 +262,7 @@ Y su procedimiento es `((1 + 2) + 3)`.
 
 ## Where y Let
 
-Estos son palabras claves que nos permite definir variables o funciones dentro de otra función, por ejemplo, si recordamos la función `bmiTell` podemos reescribirlo de este modo:
+Estas son palabras claves que nos permiten definir variables o funciones dentro de otra función, por ejemplo, si recordamos la función `bmiTell` podemos reescribirlo de este modo:
 
 ```haskell
 bmiTell :: Float -> String
@@ -261,7 +274,7 @@ bmiTell weight height
     where bmi = weight / height ^ 2
 ```
 
-Y de igual manera podemos hacer con `let`, por ejemplo si quisiéramos tener la función `volumeCylinder`
+Y de igual manera podemos hacer con `let`, por ejemplo, si quisiéramos tener la función `volumeCylinder`
 
 ```haskell
 volumeCyllinder :: Float -> Float -> String
@@ -273,7 +286,7 @@ volumeCyllinder height diameter =
 
 ## List Comprehension
 
-Si has has usado Python seguro estas familiarizado con esta manera de definir listas, esto nos permite de manera sencilla generar nuevas listas. Tambien de esta manera es posible construir nuestro propia función `filter` como viene a continuación.
+Si has usado Python seguro estas familiarizado con esta manera de definir listas, esto nos permite de manera sencilla generar nuevas listas. También de esta manera es posible construir nuestra propia función `filter` como viene a continuación.
 
 **Haskell Version**
 
@@ -283,7 +296,7 @@ myFilter cond values = [value | value <- values, cond value]
 ```
 
 ```haskell
-myFilter odd [1..10] -- result: [1,3,5,7,9]
+myFilter odd [1..10] -- result: [1, 3, 5, 7, 9]
 ```
 
 **Python Version**
@@ -300,3 +313,41 @@ def myFilter(cond: callable[[T],bool], values: list[T]):
 ```python
 miFilter(lambda x: x % 2 != 0, range(10))) # result: [1, 3, 5, 7, 9]
 ```
+
+## Lazyness
+
+Cuando se trata de evaluar cosas Haskell es un lenguaje extremadamente perezoso, lo que conlleva que solo lo que es estrictamente necesario se evalúa. Esto tiene muchas ventajas, por ejemplo podemos crear listas infinitas y no tener problemas de memoria.
+
+```haskell
+[0 ..]    -- return: [1,2,3,4,5,6,7,8,...]
+[2, 4 ..] -- return: [2,4,6,8,10,12,...]
+[5, 8 ..] -- return: [5,8,11,14,17,... ]
+```
+
+También es posible construir nuevas funciones a partir de otras, por ejemplo:
+
+```haskell
+sumOne = (+1)
+sumOne 2           -- return: 3
+
+map sumOne [1,2,3] -- return: [2,3,4]
+```
+
+---
+
+Espero que te haya gustado este tutorial y que haya sido de utilidad para tu llegada al lado oscuro, la programación funcional.
+
+Haskell es un lenguaje que puede ser intimidante, pero una vez que entiendes sus bases, comprendes todo lo que puedes hacer con el y la facilidad con que puedes generar proyectos.
+
+Por último, quiero remendarte estas herramientas, que te permitirán encontrar funciones, paquetes y más.
+
+- [hoogle](https://hoogle.haskell.org)
+- [haskellspot](https://www.haskellspot.com)
+- [zvon](http://zvon.org/other/haskell/Outputglobal/index.html)
+
+---
+
+## Referencias
+
+- [Haskell Beginners 2022](https://slides.com/haskellbeginners2022)
+- [Learn You a Haskell for Great Good!](http://learnyouahaskell.com)
