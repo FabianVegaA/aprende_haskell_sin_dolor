@@ -229,13 +229,13 @@ Vayamos por partes:
 map odd [1,2,3,4] -- return: [True, False, True, False]
 ```
 
-Tal como esto, existe `filter`, `foldl`, `foldl1` y muchos más, pero concentrémonos en los 2 últimas funciones.
+Tal como esto, existe `filter`, `foldl`, `foldl1` y muchos más, pero concentrémonos en las 2 últimas funciones.
 
 ```haskell
 foldl :: (b -> a -> b) -> b -> t a -> b
 ```
 
-Esta función es equivalente a `reduce` de Python y para entender su firma desglocemoslo por partes:
+Esta función es equivalente a `reduce` de Python y para entender su firma desglosémoslo por partes:
 
 1. `(b -> a -> b)`: Esto es una función que recibe un tipo `b`, un `a` y retorna un `b`.
 2. `b`: Para esta función este argumento es un valor inicial.
@@ -248,7 +248,7 @@ foldl (+) 0 [1,2,3] -- return: 6
 
 Como tal vez lo intuiste `foldl` lo que hace es `(((0 + 1) + 2) + 3)`.
 
-Para `foldl1` es lo mismo solo que para el valor inicial se toma al primer valor de la lista. Es decir:
+Para `foldl1` es lo mismo solo que para el valor inicial se toma el primer valor de la lista. Es decir:
 
 ```haskell
 foldl1 :: (b -> a -> b) -> t a -> b
@@ -316,7 +316,7 @@ miFilter(lambda x: x % 2 != 0, range(10))) # result: [1, 3, 5, 7, 9]
 
 ## Lazyness
 
-Cuando se trata de evaluar cosas Haskell es un lenguaje extremadamente perezoso, lo que conlleva que solo lo que es estrictamente necesario se evalúa. Esto tiene muchas ventajas, por ejemplo podemos crear listas infinitas y no tener problemas de memoria.
+Cuando se trata de evaluar cosas Haskell es un lenguaje extremadamente perezoso, lo que conlleva que solo lo que es estrictamente necesario se evalúa. Esto tiene muchas ventajas, por ejemplo, podemos crear listas infinitas y no tener problemas de memoria.
 
 ```haskell
 [0 ..]    -- return: [1,2,3,4,5,6,7,8,...]
@@ -337,7 +337,7 @@ map sumOne [1,2,3] -- return: [2,3,4]
 
 Espero que te haya gustado este tutorial y que haya sido de utilidad para tu llegada al lado oscuro, la programación funcional.
 
-Haskell es un lenguaje que puede ser intimidante, pero una vez que entiendes sus bases, comprendes todo lo que puedes hacer con el y la facilidad con que puedes generar proyectos.
+Haskell es un lenguaje que puede ser intimidante, pero una vez que entiendes sus bases, comprendes todo lo que puedes hacer con él y la facilidad con que puedes generar proyectos.
 
 Por último, quiero remendarte estas herramientas, que te permitirán encontrar funciones, paquetes y más.
 
