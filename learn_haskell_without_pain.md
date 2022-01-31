@@ -9,17 +9,21 @@ Este artículo es una introducción a Haskell para todo aquel que proviene de un
   - [Instalación](#instalación)
   - [Primeros pasos](#primeros-pasos)
     - [Crea tu primera función](#crea-tu-primera-función)
-      - [Guard](#guard)
-      - [If](#if)
-      - [Case](#case)
+      - [**Guard**](#guard)
+      - [**If**](#if)
+      - [**Case**](#case)
     - [Cómo llamar a una función](#cómo-llamar-a-una-función)
   - [Más ejemplos de Funciones](#más-ejemplos-de-funciones)
   - [Todo es una función](#todo-es-una-función)
   - [Manejo de Inputs y Outputs](#manejo-de-inputs-y-outputs)
+  - [Estructuras de datos](#estructuras-de-datos)
+    - [Listas](#listas)
+    - [Tuplas](#tuplas)
   - [Adiós iteradores](#adiós-iteradores)
   - [Where y Let](#where-y-let)
   - [List Comprehension](#list-comprehension)
-  - [Lazyness](#lazyness)
+  - [Laziness](#laziness)
+  - [Curried Functions](#curried-functions)
   - [Referencias](#referencias)
 
 Siempre que hablo con otros desarrolladores de software sobre este lenguaje, me dicen "Intenté aprenderlo, pero su sintaxis es... un poco peculiar", y me parece que tienen razón.
@@ -92,7 +96,7 @@ Además del Pattern Mathing podemos utilizar **guards**, **ifs** y **case** como
 
 Aquí va un breve ejemplo de los 3 casos:
 
-#### Guard
+#### **Guard**
 
 Esta es otra estructura que nos permite manejar el flujo de nuestros programas, es semejante a un switch de otros lenguajes como C.
 
@@ -117,7 +121,7 @@ bmiTell bmi
     | otherwise   = "That is worrying!"
 ```
 
-#### If
+#### **If**
 
 Tal como en casi todos los lenguajes tenemos los `if` la única diferencia es que no tenemos `else if` o `elif`.
 
@@ -128,7 +132,7 @@ even n = if mod n 2 == 0
     else False
 ```
 
-#### Case
+#### **Case**
 
 Para los casos en que necesitamos más condiciones también podemos usar los `case`:
 
@@ -203,6 +207,50 @@ Y yo te responderé `IO` es un Monad 🤯. Tranquilo... Es tan complejo como par
 
 Eso significa que el resultado de getLine que es un `IO String` por ahora imagina a `IO` como una caja que contiene un `String`, y eso es lo que se guarda en `name`.
 
+## Estructuras de datos
+
+En Haskell se tienen dos estructuras de datos básicas, las listas y tuplas.
+
+### Listas
+
+Aquí no hay mucha diferencia con la mayoria de lenguajes. Una lista se define tal que así `[1,2,3,4,5]`, algo interesante de tomar encuenta es cómo se define en cuanto a tipos una lista, por ejemplo, para el caso anterior, la lista es de tipo `[Int]`.
+
+```haskell
+[1,2,3,4,5]          -- type: [Int]
+[1.2, 2.3, 3.4, 4.5] -- type: [Float]
+[True, False]        -- type: [Bool]
+"Hello, World!"      -- type: [Char]
+```
+
+En este lenguaje, también tenemos `ranges`, como `[1..10]` y `[1,3..10]`, que son listas de números enteros.
+
+Más ejemplos:
+
+```haskell
+[1..10] -- return: [1,2,3,4,5,6,7,8,9,10]
+[1,3..10] -- return: [1,3,5,7,9]
+[1.1, 3.3..10.9] -- return: [1.1,3.3,5.5,7.7,9.9]
+['a'..'z'] -- return: "abcdefghijklmnopqrstuvwxyz"
+```
+También podemos tener listas infinitas:
+
+```haskell
+[1..] -- return: [1,2,3,4,5,...]
+[1,3..] -- return: [1,3,5,7,9,...]
+[1.1..] -- return: [1.1,2.1,3.1,4.1,5.1,...]
+```
+
+### Tuplas
+
+Del mismo modo que las listas las tuplas se definen usando parentesis, por ejemplo `(1,2,3)`.
+
+```haskell
+(1,2,3)                 -- type: (Int, Int, Int)
+(1.2, 2.3)              -- type: (Float, Float)
+(True, False)           -- type: (Bool, Bool)
+([1,2,3], 1.2, "Hello") -- type: ([Int], Float, String)
+```
+
 ## Adiós iteradores
 
 Algo que suele ser muy traumático en este lenguaje y en la programación funcional en general para los programadores es que aquí no existen estructuras como los `for`, `while`, ni `do while`, lo que suele confundir. Esto no significa que no haya otra manera de recorrer una lista, solo nos lleva usar otras formas de hacerlo.
@@ -265,7 +313,7 @@ Y su procedimiento es `((1 + 2) + 3)`.
 Estas son palabras claves que nos permiten definir variables o funciones dentro de otra función, por ejemplo, si recordamos la función `bmiTell` podemos reescribirlo de este modo:
 
 ```haskell
-bmiTell :: Float -> String
+bmiTell :: Float -> Float -> String
 bmiTell weight height
     | bmi <= 18.5 = "You're underweight!"
     | bmi <= 25.0 = "You're supposedly normal!"
@@ -314,40 +362,70 @@ def myFilter(cond: callable[[T],bool], values: list[T]):
 miFilter(lambda x: x % 2 != 0, range(10))) # result: [1, 3, 5, 7, 9]
 ```
 
-## Lazyness
+## Laziness
 
-Cuando se trata de evaluar cosas Haskell es un lenguaje extremadamente perezoso, lo que conlleva que solo lo que es estrictamente necesario se evalúa. Esto tiene muchas ventajas, por ejemplo, podemos crear listas infinitas y no tener problemas de memoria.
+Cuando se trata de evaluar cosas Haskell es un lenguaje extremadamente perezoso, pues posee algo llamado _Lazy Evaluation_, lo que conlleva que solo lo que es estrictamente necesario se evalúa.
 
-```haskell
-[0 ..]    -- return: [1,2,3,4,5,6,7,8,...]
-[2, 4 ..] -- return: [2,4,6,8,10,12,...]
-[5, 8 ..] -- return: [5,8,11,14,17,... ]
-```
-
-También es posible construir nuevas funciones a partir de otras, por ejemplo:
+Esto queda mucho mejor explicado en el siguiente ejemplo:
 
 ```haskell
-sumOne = (+1)
-sumOne 2           -- return: 3
-
-map sumOne [1,2,3] -- return: [2,3,4]
+onlyOneArg :: a -> a -> a
+onlyOneArg x y = x
 ```
+
+Y evaluar `onlyOneArg 1 (583 ^ 1212)`, Haskell no evaluaría el segundo argumento pues no es necesario para el resultado final, eso es una de las ventajas de no tener _Strict Evaluation_.
+
+## Curried Functions
+
+En Haskell las funciones únicamente reciben de a un argumento, pero entonces ¿cómo lo hacemos para recibir más argumentos?
+
+Para ello lo que hace es evaluar parcialmente la función para cada argumento, por ejemplo:
+
+```haskell
+sum3 :: Int -> Int -> Int -> Int
+sum3 x y z = x + y + z
+
+sumTwoWith1 = sum3 1
+
+sumTwoWith1 2 3 -- return: 6
+```
+
+Como debes haber observado al evaluar `sum3 1` esto nos retorna una nueva función que recibe 2 argumentos, en este caso `sumTwoWith1` posee la siguiente firma:
+
+```haskell
+sumTwoWith1 :: Int -> Int -> Int
+```
+
+Otro ejemplo interesante es la función `sum` que suma todos los valores en una lista:
+
+```haskell
+sum :: (Num a) => [a] -> a
+sum = foldl1 (+)
+```
+
+De este modo al evaluar `sum [1,2,3]` nos retorna 6.
 
 ---
 
-Espero que te haya gustado este tutorial y que haya sido de utilidad para tu llegada al lado oscuro, la programación funcional.
+Esto es todo por el momento, espero que te haya gustado este tutorial y que haya sido de utilidad para tu llegada al lado oscuro, la programación funcional.
 
-Haskell es un lenguaje que puede ser intimidante, pero una vez que entiendes sus bases, comprendes todo lo que puedes hacer con él y la facilidad con que puedes generar proyectos.
+Haskell es un lenguaje que tiene mucho potencial y aplicabilidad para generar proyectos, en áreas como en el blockchain, backend o aplicaciones de escritorio y que gracias a su tipificado permite desarrollar programas altamente confiables y robustos. Además, posee una gran facilidad para construir programas con paralelismo y concurrencia. Lo que lo hace un lenguaje muy potente.
 
-Por último, quiero remendarte estas herramientas, que te permitirán encontrar funciones, paquetes y más.
+Por último, quiero recomendarte estas herramientas, las cuales te permitirán encontrar funciones, paquetes y más.
 
 - [hoogle](https://hoogle.haskell.org)
 - [haskellspot](https://www.haskellspot.com)
 - [zvon](http://zvon.org/other/haskell/Outputglobal/index.html)
 
----
+Y algunos videos y conferencias que te pueden interesar:
+
+- [Painless software development with Haskell - Paweł Szulc](https://www.youtube.com/watch?v=idU7GdlfP9Q)
+- [Functional Programming & Haskell - Computerphile](https://www.youtube.com/watch?v=LnX3B9oaKzw)
+- [What is a Monad? - Computerphile](https://www.youtube.com/watch?v=t1e8gqXLbsU&t=889s)
+- [Making Music with Haskell From Scratch](https://www.youtube.com/watch?v=FYTZkE5BZ-0&t=292s)
 
 ## Referencias
 
 - [Haskell Beginners 2022](https://slides.com/haskellbeginners2022)
 - [Learn You a Haskell for Great Good!](http://learnyouahaskell.com)
+- [Laziness](https://www.schoolofhaskell.com/school/starting-with-haskell/introduction-to-haskell/6-laziness)

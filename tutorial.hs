@@ -1,4 +1,11 @@
-main = print $ iterateList (+ 1) [1 .. 10]
+import Data.Char (toUpper)
+
+main :: IO ()
+main = do
+  putStr "Say your name: "
+  name <- getLine
+  putStrLn ("\nHello, " ++ name ++ "!")
+  putStrLn "Welcome to the dark side of programming!"
 
 describeList :: [a] -> String
 describeList xs =
@@ -22,3 +29,6 @@ volumeCyllinder height diameter =
 
 myFilter :: (a -> Bool) -> [a] -> [a]
 myFilter cond values = [value | value <- values, cond value]
+
+mySum :: (Num a) => [a] -> a
+mySum = foldl1 (+)
