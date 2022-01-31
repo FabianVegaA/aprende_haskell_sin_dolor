@@ -1,5 +1,7 @@
 # Aprende Haskell sin dolor
 
+![Portada](images/codye.jpeg)
+
 Este artículo es una introducción a Haskell para todo aquel que proviene de un lenguaje de alto nivel como Python, Ruby, Java, etc.
 
 ## Índice
@@ -227,15 +229,15 @@ En este lenguaje, también tenemos `ranges`, como `[1..10]` y `[1,3..10]`, que s
 Más ejemplos:
 
 ```haskell
-[1..10] -- return: [1,2,3,4,5,6,7,8,9,10]
-[1,3..10] -- return: [1,3,5,7,9]
+[1..10]          -- return: [1,2,3,4,5,6,7,8,9,10]
+[1,3..10]        -- return: [1,3,5,7,9]
 [1.1, 3.3..10.9] -- return: [1.1,3.3,5.5,7.7,9.9]
-['a'..'z'] -- return: "abcdefghijklmnopqrstuvwxyz"
+['a'..'z']       -- return: "abcdefghijklmnopqrstuvwxyz"
 ```
 También podemos tener listas infinitas:
 
 ```haskell
-[1..] -- return: [1,2,3,4,5,...]
+[1..]   -- return: [1,2,3,4,5,...]
 [1,3..] -- return: [1,3,5,7,9,...]
 [1.1..] -- return: [1.1,2.1,3.1,4.1,5.1,...]
 ```
@@ -344,7 +346,7 @@ myFilter cond values = [value | value <- values, cond value]
 ```
 
 ```haskell
-myFilter odd [1..10] -- result: [1, 3, 5, 7, 9]
+myFilter odd [0..10] -- result: [1, 3, 5, 7, 9]
 ```
 
 **Python Version**
@@ -354,7 +356,7 @@ from typing import TypeVar
 
 T = TypeVar("T")
 
-def myFilter(cond: callable[[T],bool], values: list[T]):
+def myFilter(cond: callable[[T],bool], values: list[T]) -> list[T]:
     return [value for value in values if cond(value)]
 ```
 
